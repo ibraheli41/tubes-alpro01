@@ -12,6 +12,10 @@ struct Slot {
     int masuk[4]; // Waktu masuk dalam menit total
 };
 
+void fungsiGaris(){
+    cout << "=================================================\n";
+}
+
 int tampilkanStatus(Slot parkir[], int n) {
     for (int i = 0; i < n; ++i) {
         if (parkir[i].kosong) {
@@ -125,9 +129,11 @@ int ambilKendaraan(Slot parkir[], int n) {
                     biaya = (durasi / 60) * 500;
                 }
 
+                fungsiGaris();
                 cout << "Kendaraan dengan plat " << p << " diambil dari slot " << parkir[i].no << ".\n";
                 cout << "Durasi: " << durasi / 60 << " jam " << durasi % 60 << " menit.\n";
                 cout << "Biaya: Rp" << biaya << ".\n";
+                fungsiGaris();
 
                 for (int k = j; k < parkir[i].isi - 1; ++k) {
                     parkir[i].plat[k] = parkir[i].plat[k + 1];
@@ -167,6 +173,10 @@ int main() {
 
     int menu;
     do {
+        fungsiGaris();
+        cout << "\tSELAMAT DATANG PADA PROGRAM PARKIR\n";
+        fungsiGaris();
+
         cout << "\nMenu Parkir:\n";
         cout << "1. Tampilkan Status Parkir\n";
         cout << "2. Parkir Kendaraan\n";
