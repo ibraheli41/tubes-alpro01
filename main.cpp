@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <limits>
 using namespace std;
 
 struct Slot {
@@ -158,7 +157,8 @@ void kembali() {
     cout << "\nTekan Enter untuk kembali ke menu...\n";
     string inputExit;
     cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.ignore();
+    // cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin, inputExit);
     system("cls");
 }
@@ -175,7 +175,8 @@ int main() {
         parkir[i].jenis = "";
     }
 
-    int menu;
+    string menu;                               // Varriabel Menu
+    
     do {
         fungsiGaris();
         cout << "\tSELAMAT DATANG PADA PROGRAM PARKIR\n";
@@ -187,28 +188,32 @@ int main() {
         cout << "3. Ambil Kendaraan\n";
         cout << "4. Keluar\n";
         cout << "Pilih (1-4): ";
-        cin >> menu;
 
-        switch (menu) {
-            case 1:
-                tampilkanStatus(parkir, n);
-                kembali();
-                break;
-            case 2:
-                parkirKendaraan(parkir, n);
-                kembali();
-                break;
-            case 3:
-                ambilKendaraan(parkir, n);
-                kembali();
-                break;
-            case 4:
-                cout << "Keluar.\n";
-                break;
-            default:
-                cout << "Pilihan tidak valid.\n";
+        cin >> menu;                        // Input nilai Menu
+
+
+        if (menu == "1")
+        {
+            tampilkanStatus(parkir, n);
+            kembali();
+        } 
+        else if (menu == "2")
+        {
+            parkirKendaraan(parkir, n);
+            kembali();
+        } 
+        else if (menu == "3")
+        {
+            ambilKendaraan(parkir, n);
+            kembali();
+        } 
+
+        else {
+            system("cls");
         }
-    } while (menu != 4);
+
+
+    } while (menu != "4");
 
     return 0;
 }
