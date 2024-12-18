@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-
+#include <limits>
 using namespace std;
 
 struct Slot {
@@ -12,8 +12,9 @@ struct Slot {
     int masuk[4]; // Waktu masuk dalam menit total
 };
 
-void fungsiGaris(){
+int fungsiGaris(){
     cout << "=================================================\n";
+    return 0;
 }
 
 int tampilkanStatus(Slot parkir[], int n) {
@@ -155,16 +156,19 @@ int ambilKendaraan(Slot parkir[], int n) {
 
 void kembali() {
     cout << "\nTekan Enter untuk kembali ke menu...\n";
-    cin.ignore();
-    cin.get();
+    string inputExit;
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, inputExit);
     system("cls");
 }
 
 int main() {
-    int n = 8;
-    Slot parkir[n];
+    int n = 8;          // Inisialisasi Variabel N dengan Nilai 8
+    Slot parkir[n];     // Array variabel parkir (dari class Slot)
 
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) // mengatur nilai variabel dari struct parkir 
+    {   
         parkir[i].no = i + 1;
         parkir[i].kosong = true;
         parkir[i].isi = 0;
