@@ -1,0 +1,36 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "g++ Build and Run",
+			"command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+			"args": [
+				"-g",
+				"${file}",
+				"-o",
+				"${fileDirname}\\${fileBasenameNoExtension}.exe"
+			],
+			"options": {
+				"cwd": "C:\\msys64\\ucrt64\\bin"
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "Compile and Run C++",
+			"dependsOn": [],
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
+		},
+		{
+			"label": "Run Executable",
+			"type": "shell",
+			"command": "${fileDirname}/${fileBasenameNoExtension}",
+			"group": "build",
+			"dependsOn": "Build and Run"
+		}
+	]
+}
