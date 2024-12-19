@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
+ 
 using namespace std;
 
 // made by rakha
+// ini editan ibrahim 
 
 struct Slot {
     int no;
