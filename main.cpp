@@ -2,6 +2,8 @@
 #include <string>
 using namespace std;
 
+// made by rakha
+
 struct Slot {
     int no;
     string plat[4];
