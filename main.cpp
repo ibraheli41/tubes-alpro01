@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-// #include <iomanip>  // Test untuk tampilan tengah
 using namespace std;
 
 struct Slot {
@@ -31,7 +30,8 @@ void fungsiMenu()
 }
 
 int tampilkanStatus(Slot parkir[], int n) {
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) // mengeprint sebanyak n
+    {
         if (parkir[i].kosong) {
             cout << "Slot " << parkir[i].no << " kosong.\n";
         } else {
