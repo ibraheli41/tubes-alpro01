@@ -1,26 +1,60 @@
+/* 
+TUGAS BESAR ALGORITMA DAN PEMROGRAMAN
+Judul: SMART PARKING SLOT SYSTEM
+
+Kelompok 04
+Kelas D3TK-48-01
+
+Anggota:
+Muhammad Rakha Syahvirchan 	607022400009
+Teddy Agustio Mulky		    607022400053
+Ibrahim fauzi Rahman		607022400009
+
+Rabu, 01 Januari 2025
+*/
+
 #include <iostream>
 #include <string>
 using namespace std;
 
 struct Slot {
-    int no;
-    string plat[4];
-    bool kosong;
-    int isi;
-    string jenis;
-    int masuk[4]; // Waktu masuk dalam menit total
+    int no;         // nilai Nomor Slot
+    string plat[4]; // nilai plat nomor kendaraan
+    bool kosong;    // kosong tidaknya Slot
+    int isi;        // isi (dalam integer)
+    string jenis;   // jenis Kendaraan
+    int masuk[4];   // Waktu masuk dalam menit total
 };
 
-int fungsiGaris(){
-    cout << "=================================================\n";
+int fungsiGaris()   // menampilkan garis untuk estetika
+{
+    cout<<"========================================================="<<endl;
     return 0;
 }
 
-int tampilkanStatus(Slot parkir[], int n) {
-    for (int i = 0; i < n; ++i) {
-        if (parkir[i].kosong) {
+int fungsiMenu(){   // menampilkan navigasi utama
+    fungsiGaris();
+    cout << "SELAMAT DATANG PADA PROGRAM PARKIR\n";
+    fungsiGaris();
+
+    cout << "\nMenu Parkir:\n";
+    cout << "1. Tampilkan Status Parkir\n";
+    cout << "2. Parkir Kendaraan\n";
+    cout << "3. Ambil Kendaraan\n";
+    cout << "4. Keluar\n";
+    return 0;
+}
+
+int tampilkanStatus(Slot parkir[], int n) // fungsi menampilkan status parkir yang ada
+{
+    for (int i = 0; i < n; ++i) // perulangan untuk menampilkan slot parkir yang tersedia
+    {
+        if (parkir[i].kosong)   // jika slot kosong 
+        {
             cout << "Slot " << parkir[i].no << " kosong.\n";
-        } else {
+        } 
+        else // jika slot terisi maka akan menampilakan NO SLOT, JENIS, JAM-MENIT, PLAT NOMOR
+        {
             cout << "Slot " << parkir[i].no << " terisi oleh " << parkir[i].jenis;
             for (int j = 0; j < parkir[i].isi; ++j) {
                 int jam = parkir[i].masuk[j] / 60;
@@ -31,246 +65,228 @@ int tampilkanStatus(Slot parkir[], int n) {
             cout << endl;
         }
     }
-    return 0;
+    return 0;   // mengembalikan nilai 
 }
 
-int parkirKendaraan(Slot parkir[], int n) {
-    int slot, totalMasuk;
-    string p, jenis;
-    float waktu;
+int parkirKendaraan(Slot parkir[], int n) // fungsi parkir kendaraan; n = totalSlotParkir (nilai default = 8)
+{
+    /* DEKLARASI VARIABEL */
+    int slot, totalMasuk;               // slot = slot parkir, totalMasuk = waktu total masuk kendaraan
+    string platNomorKendaraan, jenis;   // plat nomor kendaraan dan jenis kendaraan
+    float waktu;                        // waktu
 
     cout << "Jenis kendaraan (Mobil/Motor/Sepeda): ";
-    cin >> jenis;
+    cin >> jenis;                       // masukan jenis kendaraan
 
-    // Tentukan jenis kendaraan
+    // Menentukan jenis kendaraan
     bool mobil = (jenis == "Mobil" || jenis == "mobil" || jenis == "MOBIL");
     bool motor = (jenis == "Motor" || jenis == "motor" || jenis == "MOTOR");
     bool sepeda = (jenis == "Sepeda" || jenis == "sepeda" || jenis == "SEPEDA");
 
+    /* Jika bukan mobil AND motor AND sepeda, maka muncul notifikasi*/
     if (!mobil && !motor && !sepeda) {
         cout << "Jenis kendaraan tidak dikenali.\n";
-        return -1;
+        system("cls"); // membersihkan terminal
+		fungsiMenu();   // memanggil fungsi menu
+		return parkirKendaraan(parkir, n); // kembali hanya ke tampilan ambil kendaraan (n = 8)
     }
+    
+    // menampilkan slot kosong untuk jenis yang dimasukkan oleh user
+    cout << "Slot kosong untuk " << jenis << ":\n"; 
 
-    cout << "Slot kosong untuk " << jenis << ":\n";
-    bool ada = false;
+    bool ada = false; // deklarasi variabel ada dgn nilai false
 
-    for (int i = 0; i < n; ++i) {
-        if (sepeda && (i == 6 || i == 7) && parkir[i].isi < 4) {
+    /* menampilkan slot yang kosong berdasarkan jenis kendaraan*/
+    for (int i = 0; i < n; ++i) // n = 8 (nilai totalSlotParkir)
+    {
+        if (sepeda && (i == 6 || i == 7) && parkir[i].isi < 4) // Sepeda slot 6-7
+        {
             cout << "Slot " << parkir[i].no << " tersedia (" << parkir[i].isi << "/4 sepeda).\n";
             ada = true;
-        } else if (motor && i >= 4 && i < 6 && parkir[i].isi < 2) {
+        } 
+        else if (motor && i >= 4 && i < 6 && parkir[i].isi < 2) // MOTOR slot 4-6
+        {
             cout << "Slot " << parkir[i].no << " tersedia (" << parkir[i].isi << "/2 motor).\n";
             ada = true;
-        } else if (mobil && i < 4 && parkir[i].kosong) {
+        } 
+        else if (mobil && i < 4 && parkir[i].kosong)    // MOBIL slot 1-4
+        {
             cout << "Slot " << parkir[i].no << " tersedia.\n";
             ada = true;
         }
     }
 
-    if (!ada) {
+    if (!ada) // jika ada = false maka print tidak ada slot kosong
+    {
         cout << "Tidak ada slot kosong.\n";
-        return -1;
+        return -1;  // mengembalikan nilai jika tidak ada elemen yang tidak ditemukan
     }
 
-    cout << "Pilih slot: ";
+
+    cout << "Pilih slot: "; // pengguna memilih slot
     cin >> slot;
-    cout << "Plat nomor: ";
-    cin.ignore();
-    getline(cin, p);
-    cout << "Waktu masuk (jam.menit, contoh: 8.30): ";
+    
+    cout << "Plat nomor: "; // pengguna memilih plat
+    cin.ignore();           // mengabaikan masukan
+    getline(cin, platNomorKendaraan);   // memasukan nilai platnomor kendaraan, pakai getline karena string
+    
+    cout << "Waktu masuk (jam.menit, contoh: 8.30): "; // pengguna memasukan waktu masuk
     cin >> waktu;
 
+    /* Konversi waktu masuk dari FLOAT ke INTEGER*/
     int jam = static_cast<int>(waktu);
     int menit = static_cast<int>((waktu - jam) * 100);
     totalMasuk = (jam * 60) + menit;
 
+    /* Memilih array variabel parkir dengan indeks dari 0*/
     int idx = slot - 1;
-    parkir[idx].plat[parkir[idx].isi] = p;
-    parkir[idx].masuk[parkir[idx].isi] = totalMasuk;
-    parkir[idx].isi++;
-    parkir[idx].kosong = false;
-    parkir[idx].jenis = jenis;
+    parkir[idx].plat[parkir[idx].isi] = platNomorKendaraan; // memasukan nilai platNomorKendaraan ke parkir.plat
+    parkir[idx].masuk[parkir[idx].isi] = totalMasuk;        // memasukan nilai totalMasuk ke parkir.masuk
+    parkir[idx].isi++;                                      // increment nilai isi 
+    parkir[idx].kosong = false;                             // mengubah nilai parkir.kosong = false
+    parkir[idx].jenis = jenis;                              // memasukan nilai jenis ke parkir.jenis
 
-    cout << jenis << " dengan plat " << p << " diparkir di slot " << slot
+    /* menampilkan hasil akhir dari yang dimasukan user */
+    cout << jenis << " dengan plat " << platNomorKendaraan << " diparkir di slot " << slot
          << " pada " << jam << ":" << (menit < 10 ? "0" : "") << menit << ".\n";
-    return 0;
+    
+    return 0; // mengembalikan nilai
 }
 
-int ambilKendaraan(Slot parkir[], int n) {
-    
-    /* Deklarasi variabel untuk input dan perhitungan*/
-    string input_platNomor;
-    float waktuKeluar;
-    int totalKeluar;
-    
-    /* Setingan Biaya Parkir Kendaraan*/
-    int biayaMobil = 5000;
-    int biayaMotor = 2000;
-    int biayaSepeda = 1000;
-    
-    /* Input pengguna plat nomor kendaraan*/
+int ambilKendaraan(Slot parkir[], int n)    // fungsi ambil kendaraan; n = totalSlotParkir (nilai default = 8)
+{
+    string platNomor;   // variabel untuk menyimpan PLAT NOMOR
+    float waktuKeluar;  // variabel untuk menyimpan WAKTU KELUAR KENDARAAN
+    int totalKeluar;    // variabel untuk menyimpan PERHITUNGAN WAKTU KELUAR KENDARAAN
+
     cout << "Plat nomor kendaraan: ";
-    cin.ignore();
-    getline(cin, input_platNomor);
+    getline(cin ,platNomor);    // menginput PLAT NOMOR
 
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) // perulangan sebanyak nilai totalSlotParkir (nilai default = 8)
+    {
         for (int j = 0; j < parkir[i].isi; ++j) {
-            
-            /* Jika plat nomor dan daftar plat yang ada sesuai */
-            if (parkir[i].plat[j] == input_platNomor) {
-                
-                /* Input untuk waktuKeluar */
+            if (parkir[i].plat[j] == platNomor)     // Jika input PLAT NOMOR == PLAT NOMOR YANG TERPARKIR
+            {
                 cout << "Waktu keluar (jam.menit, contoh: 10.45): ";
-                cin >> waktuKeluar;
+                cin >> waktuKeluar;                 // input WAKTU KELUAR KENDARAAN
 
-                /* Konversi waktu keluar dari float ke int */
+                /* KONVERSI FLOAT KE INTEGER */
                 int jam = static_cast<int>(waktuKeluar);
                 int menit = static_cast<int>((waktuKeluar - jam) * 100);
-                totalKeluar = (jam * 60) + menit;
 
-                /* Perhitungan Durasi Parkir */
-                int totalMasuk = parkir[i].masuk[j];
-                int durasi = totalKeluar - totalMasuk;
-                if (durasi < 0) durasi += 1440;                 // ????
+                totalKeluar = (jam * 60) + menit;   // perhitungan Nilai Total Keluar (konversi jam ke menit)
 
-                /**********************************************************************/
-                /* Percabangan untuk menghitung biaya berdasarkan jenis kendaraan */
-                int biaya = 0; // menyimpan nilai biaya
-                /* === Mobil === */
+                int totalMasuk = parkir[i].masuk[j];    // TOTAL MASUK = Nilai dari variabel parkir.masuk
+                int durasi = totalKeluar - totalMasuk;  // perhitungan DURASI = WAKTU TOTAL KELUAR - WAKTU TOTAL MASUK
+
+                if (durasi < 0) durasi += 1440;     // jika durasi kurang dari 0 maka durasi + 1440
+
+                int biaya = 0;  // deklarasi variabel BIAYA
+
+                /* PERHITUNGAN BIAYA PARKIR. MOBIL = 5000, MOTOR = 2000, SEPEDA = 500*/
+
                 if (parkir[i].jenis == "Mobil" || parkir[i].jenis == "mobil" || parkir[i].jenis == "MOBIL") 
                 {
-                    biaya = (durasi / 60) * biayaMobil;
+                    biaya = (durasi / 60) * 5000;
                 } 
-                /* === Motor  === */
                 else if (parkir[i].jenis == "Motor" || parkir[i].jenis == "motor" || parkir[i].jenis == "MOTOR") 
                 {
-                    biaya = (durasi / 60) * biayaMotor;
+                    biaya = (durasi / 60) * 2000;
                 } 
-                /* === Sepeda  === */
                 else if (parkir[i].jenis == "Sepeda" || parkir[i].jenis == "sepeda" || parkir[i].jenis == "SEPEDA") 
                 {
-                    biaya = (durasi / 60) * biayaSepeda;
+                    biaya = (durasi / 60) * 500;
                 }
-                /**********************************************************************/
 
-                /**********************************************************************/
-                /* Print total biaya */
+                /* MENAMPIKAN BIAYA PARKIR */
                 fungsiGaris();
-                cout << "Kendaraan dengan plat " << input_platNomor << " diambil dari slot " << parkir[i].no << ".\n";
+                cout << "Kendaraan dengan plat " << platNomor << " diambil dari slot " << parkir[i].no << ".\n";
                 cout << "Durasi: " << durasi / 60 << " jam " << durasi % 60 << " menit.\n";
                 cout << "Biaya: Rp" << biaya << ".\n";
                 fungsiGaris();
-                /**********************************************************************/
 
-                /**********************************************************************/
-                /* Menghapus daftar kendaraan dengan memindahkan ke variabel lain*/
-                for (int k = j; k < parkir[i].isi - 1; ++k) 
-                {
+                /* MENGATUR ULANG NILAI VARIABEL DARI OBJEK PARKIR */
+                for (int k = j; k < parkir[i].isi - 1; ++k) {
                     parkir[i].plat[k] = parkir[i].plat[k + 1];
                     parkir[i].masuk[k] = parkir[i].masuk[k + 1];
                 }
                 parkir[i].isi--;
-
-                /* Jika parkir[i].isi == 0 maka print kosong dan mengahapus nilai jenis */
-                if (parkir[i].isi == 0) 
-                {
+                if (parkir[i].isi == 0) {
                     parkir[i].kosong = true;
                     parkir[i].jenis = "";
                 }
-                /**********************************************************************/
-                return 0;
+                return -1; // mengembalikan jika elemen tidak ditemukan
             }
         }
     }
-    /* Print jika plat nomor tidak ditemukan */
     cout << "Plat nomor tidak ditemukan.\n";
-    return -1;
+    system("cls"); 
+	fungsiMenu();
+    return ambilKendaraan(parkir, n);
 }
 
-
-/**********************************************************************/
-/* Fungsi untuk kembali ke Menu */ 
-void kembali() 
+void kembali()      // fungsi kembali ke menu
 {
     cout << "\nTekan Enter untuk kembali ke menu...\n";
     
-    string inputExit;           // Deklarasi variabel untuk input pengguna
-    
-    cin.clear();                // Clear Nilai cin
-    cin.ignore();               // Mengabaikan cin
-    getline(cin, inputExit);    // input cin
-    system("cls");              // Clear screen
+    string inputExit ;  // Deklarasi variabel inputExit untuk menyimpan masukan user
+    cin.clear();        // menghabus nilai masukan user
+    cin.ignore();       // mengabaikan masukan
+
+    getline(cin, inputExit);    // meminta memasukan nilai inputExit
+    system("cls");              // membersihkan layar terminal
 }
-/**********************************************************************/
 
-
-int main() 
+int main() // fungsi program utama
 {
-    
-    /**********************************************************************/
-    /* Jumlah Slot yang Ada -> Inisialisasi Variabel n dengan Nilai 8
-    Array parkir berdasarkan nilai n */ 
-    int n = 8;                     
-    Slot parkir[n];    
-    /**********************************************************************/ 
+    int totalSlotParkir = 8;          // Inisialisasi Variabel totalSlotParkir dengan Nilai 8 (Jumlah Parkir yang tersedia)
+    Slot parkir[totalSlotParkir];     // totalSlotParkir menjadi nilai jumlah array object parkir
 
-    /* Mengatur nilai variabel dari struct parkir */ 
-    for (int i = 0; i < n; ++i)  
+    for (int i = 0; i < totalSlotParkir; ++i) // mengatur nilai variabel dari struct parkir ketika program mulai
     {   
-        parkir[i].no = i + 1;
-        parkir[i].kosong = true;
-        parkir[i].isi = 0;
-        parkir[i].jenis = "";
+        parkir[i].no = i + 1;           // nilai dimulai dari 1 (jangan 0)
+        parkir[i].kosong = true;        // dimulai true karena slot parkir kosong
+        parkir[i].isi = 0;              // nilai 0 karena belum terisi
+        parkir[i].jenis = "";           // nilai jenis belum terisi
     }
 
-    /* Deklarasi variabel menu untuk input pengguna. 
-    Pemilihan string ditujukan untuk menggunakan karakter dan angka*/ 
-    string menu;                               
-    
-    /* Perulangan Do supaya program berjalan terus menerus*/
-    do {
-        /**********************************************************************/ 
-        /* Print Tampilan Menu*/
+    string menu;                // inisialisasi variabel Menu untuk menyimpan masukkan pengguna
+
+    do // Perulangan Do-While agar program jalan terus-menerus
+    {
         fungsiGaris();
         cout << "\tSELAMAT DATANG PADA PROGRAM PARKIR\n";
         fungsiGaris();
+
         cout << "\nMenu Parkir:\n";
         cout << "1. Tampilkan Status Parkir\n";
         cout << "2. Parkir Kendaraan\n";
         cout << "3. Ambil Kendaraan\n";
         cout << "4. Keluar\n";
         cout << "Pilih (1-4): ";
-        /**********************************************************************/ 
-        
-        /* Input nilai Menu */ 
-        cin >> menu;
 
-        /**********************************************************************/
-        /* Perulangan if else untuk memilih fitur program */ 
-        if (menu == "1")
+        cin >> menu;            // Input pilihan menu user
+
+        if (menu == "1")        // Jika input = 1
         {
-            tampilkanStatus(parkir, n);
+            tampilkanStatus(parkir, totalSlotParkir);
             kembali();
         } 
-        else if (menu == "2")
+        else if (menu == "2")   // Jika input = 2
         {
-            parkirKendaraan(parkir, n);
+            parkirKendaraan(parkir, totalSlotParkir);
             kembali();
         } 
-        else if (menu == "3")
+        else if (menu == "3")   // Jika input = 3
         {
-            ambilKendaraan(parkir, n);
+            ambilKendaraan(parkir, totalSlotParkir);
             kembali();
         } 
-        else 
-        {
-            system("cls");
+        else {
+            system("cls");      // membersihkan layar terminal
         }
-        /**********************************************************************/
 
-    } while (menu != "4");  // Tekan 4 untuk keluar
+    } while (menu != "4");      // Jika input user salah
 
     return 0;
 }
-
