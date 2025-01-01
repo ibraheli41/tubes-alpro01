@@ -1,10 +1,6 @@
 #include <iostream>
 #include <string>
- 
 using namespace std;
-
-// made by rakha
-// ini editan ibrahim 
 
 struct Slot {
     int no;
@@ -120,8 +116,7 @@ int ambilKendaraan(Slot parkir[], int n) {
     int totalKeluar;
 
     cout << "Plat nomor kendaraan: ";
-    cin.ignore();
-    getline(cin, p);
+    getline(cin ,p);
 
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < parkir[i].isi; ++j) {
